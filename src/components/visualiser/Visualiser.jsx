@@ -35,6 +35,7 @@ class Visualiser extends React.Component {
 
     render() {
         this.state.audioAnalyser.initialize();
+        this.state.audioAnalyser.play();
         // let svg = <SVGComponent audioAnalyser={this.state.audioAnalyser}></SVGComponent>;
         return (
             <div id="visualiser">

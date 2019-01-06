@@ -69,6 +69,10 @@ class AudioAnalyser {
         this.audioObjects.sourceNode.start(0);
         console.log("Playing");
     }
+
+    play() {
+        this.audioObjects.audioCtx.resume();
+    }
 }
 
 export default AudioAnalyser;
