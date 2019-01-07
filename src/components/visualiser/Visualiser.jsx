@@ -1,7 +1,6 @@
 import React from 'react';
 import AudioAnalyser from '../audio/AudioAnalyser';
 import PropTypes from 'prop-types';
-import Plot from 'react-plotly.js';
 // import TweenMax, { Bounce, Circ, Power0 } from "gsap/TweenMax";
 import CanvasComponent from "./CanvasComponent";
 const COLORS = {
