@@ -13,13 +13,14 @@ class AudioAnalyser {
             sourceNode: audioCtx.createBufferSource(),
             analyserNode: audioCtx.createAnalyser(),
             javascriptNode: audioCtx.createScriptProcessor(sampleSize, 1, 1),
-            destinationNode: audioCtx.destination,
+            destinationNode: audioCtx.destination
         }
 
         this.initialized = false;
         this.fftSize = fftSize;
         this.FFT = new Uint8Array(fftSize/2);
         this.filePath = filePath;
+        this.playing = false;
 
         this.setupNodes = this.setupNodes.bind(this);
         this.fetchAudioData = this.fetchAudioData.bind(this);
@@ -47,6 +48,14 @@ class AudioAnalyser {
     set FFT(value) {
         this._FFT = value;
     }
+
+    get playing() {
+        return this._playing;
+    }
+
+    set playing(value) {
+        this._playing = value;
+    }
     async fetchAudioData() {
         let response = await fetch(this.filePath)
         .then((res) => {
@@ -67,11 +76,22 @@ class AudioAnalyser {
         // newState.javascriptNode.onaudioprocess = () => this.props.onUpdate(newState.analyserNode);
         this.audioObjects.sourceNode.buffer = data;
         this.audioObjects.sourceNode.start(0);
-        console.log("Playing");
+        this.audioObjects.audioCtx.suspend();
+        console.log("Audio graph initialized.");
     }
 
     play() {
-        this.audioObjects.audioCtx.resume();
+        if (!this.playing) {
+            this.audioObjects.audioCtx.resume();
+            this.playing = !this.playing;
+        }
+    }
+
+    pause() {
+        if (this.playing) {
+            this.audioObjects.audioCtx.suspend();
+            this.playing = !this.playing;
+        }
     }
 }
 
