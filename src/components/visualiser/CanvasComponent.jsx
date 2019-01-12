@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Style = {
-    border: "solid",
-    borderWidth: "1px",
-    borderColor: "black"
 }
 
 const COLORS = {
@@ -34,6 +31,13 @@ class CanvasComponent extends React.Component {
         this.frame = -1;
 
         this.update = this.update.bind(this);
+        this.innerRadius = 5 * Math.PI;
+        this.outerRadius = 75 * Math.PI;
+        this.center = {
+            x: 250,
+            y: 250
+        }
+        this.deltaRotation = ((2 * Math.PI) / 64) / 50;
     }
 
     componentDidMount() {
@@ -41,7 +45,7 @@ class CanvasComponent extends React.Component {
         console.log(this.canvasRef);
         console.log(this.canvasRef.getContext("2d"));
         this.canvasCtx = this.canvasRef.getContext("2d");
-        this.circles = this.getCentersBetweenR(5 * Math.PI, 75 * Math.PI, 250, 250);
+        this.circles = this.getCentersBetweenR(this.innerRadius, this.outerRadius, this.center.x, this.center.y);
 
         for (let key in this.circles) {
             // console.log(key);
@@ -60,7 +64,6 @@ class CanvasComponent extends React.Component {
     }
 
     update() {
-        console.log("Updating canvas");
         this.canvasCtx.clearRect(0, 0, 500, 500);
         let FFT = this.props.audioAnalyser.FFT
         let groupSize = FFT.length / 5;
@@ -75,12 +78,19 @@ class CanvasComponent extends React.Component {
                     if (Math.random() < groupSize / this.circles[key].length) {
                         let circle = new Path2D();
                         elem.r = 2.5 *FFT_i/256 * Math.PI;
+                        elem.currentTheta = elem.currentTheta + elem.deltaRotation
+                        elem.x = this.center.x + elem.positionRadius * Math.cos(elem.currentTheta);
+                        elem.y = this.center.y + elem.positionRadius * Math.sin(elem.currentTheta);
+                        
                         circle.arc(elem.x, elem.y, elem.r, 0, 2*Math.PI);
                         this.canvasCtx.fillStyle = COLORS[elem.color]
                         this.canvasCtx.fill(circle);
                         i+=1;
                     } else {
                         let circle = new Path2D();
+                        elem.currentTheta = elem.currentTheta + elem.deltaRotation
+                        elem.x = this.center.x + elem.positionRadius * Math.cos(elem.currentTheta);
+                        elem.y = this.center.y + elem.positionRadius * Math.sin(elem.currentTheta);
                         circle.arc(elem.x, elem.y, elem.r, 0, 2*Math.PI);
                         this.canvasCtx.fillStyle = COLORS[elem.color]
                         this.canvasCtx.fill(circle);
@@ -93,6 +103,7 @@ class CanvasComponent extends React.Component {
 
     getCentersAtR(r, deltaTheta, x, y, fill) {
         let centers = [];
+        let deltaRotation = this.deltaRotation * fill * ((fill % 2) == 0 ? 1 : -1);
 
         if (deltaTheta <= 0) {
             throw Error("Delta theta in getCentersAtR can not be less than or equal to 0.");
@@ -103,7 +114,10 @@ class CanvasComponent extends React.Component {
                 x: r * Math.cos(theta) + x, 
                 y: r * Math.sin(theta) + y,
                 r: Math.PI/4,
-                color: fill
+                color: fill,
+                positionRadius: r,
+                currentTheta: theta,
+                deltaRotation: deltaRotation
             });
         }
 
