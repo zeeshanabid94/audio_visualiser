@@ -16,8 +16,11 @@ class PlayButton extends React.Component {
         this.play = null;
     }
     componentDidUpdate() {
+        TweenMax.killTweensOf(this.play);
+        TweenMax.killTweensOf(this.stop);
         if (this.props.playing) {
             console.log("Stop");
+            
             TweenMax.to(this.play, 1, {
                 opacity: 0
             }, 0);
