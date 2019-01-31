@@ -18,11 +18,13 @@ class App extends Component {
           Created By:
           Zeeshan Abid
         </div>
-        <a href="https://github.com/zeeshanabid94/audio_visualiser">
+        <a href="https://github.com/zeeshanabid94/audio_visualiser"
+          target="_blank">
           <FaGithub class="icon"/>
         </a>
         
-        <a href="https://www.linkedin.com/in/zeeshan-abid/">
+        <a href="https://www.linkedin.com/in/zeeshan-abid/"
+          target="_blank">
           <FaLinkedin class="icon"/>
         </a>
         
