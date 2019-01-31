@@ -15,10 +15,7 @@ const controlStyle = {
 const visualStyle = {
     border: "solid",
     borderWidth: "1px",
-    
-    width: "50%",
-    marginLeft: "25%",
-    marginRight: "25%",
+    display: "inline-block",
     paddingTop: "10px",
 }
 const canvasStyle = {
@@ -62,7 +59,7 @@ class Visualiser extends React.Component {
                     <PlayButton playing={this.state.playing} onClick={this.onPlayClick} />
                 </div>
                 <div style= {canvasStyle}>
-                    <CanvasComponent audioAnalyser={this.state.audioAnalyser}></CanvasComponent>
+                    <CanvasComponent  height={400} width={500} audioAnalyser={this.state.audioAnalyser}></CanvasComponent>
                 </div>
                 
             </div>

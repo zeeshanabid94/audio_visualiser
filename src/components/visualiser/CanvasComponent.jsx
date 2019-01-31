@@ -32,10 +32,10 @@ class CanvasComponent extends React.Component {
 
         this.update = this.update.bind(this);
         this.innerRadius = 5 * Math.PI;
-        this.outerRadius = 75 * Math.PI;
+        this.outerRadius = 60 * Math.PI;
         this.center = {
-            x: 250,
-            y: 250
+            x: this.props.width/2,
+            y: this.props.height/2
         }
         this.deltaRotation = ((2 * Math.PI) / 64) / 50;
     }
@@ -166,7 +166,7 @@ class CanvasComponent extends React.Component {
 
     render() {
         return (
-            <canvas style={Style} ref={elem => this.canvasRef = elem} height="500" width="500">
+            <canvas style={Style} ref={elem => this.canvasRef = elem} height={this.props.height} width={this.props.width}>
 
             </canvas>
         )
